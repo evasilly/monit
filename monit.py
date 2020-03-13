@@ -75,8 +75,8 @@ def main():
         # elif str(sys.argv[1]) == '-hta -':
         #     # list top 10 website addresses and its ip-s
         elif str(sys.argv[1]) == '-mt':
-            os.system('echo -n "MySQL clients count: " && [[ $(mysqladmin -udbuser -pdbpassword'
-            ' status) =~ ^[^:]*\:[^:]+\:[[:blank:]]*([[:digit:]]+) ]] && echo "$((${BASH_REMATCH[1]}))" || echo "0"')
+            os.system("""echo -n "MySQL clients count: " && mysql -udbuser -pdbpassword -e "show full processlist\G" """
+                      """| grep -E "Command:" | grep -iv "sleep\|daemon" | wc -l""")
         elif str(sys.argv[1]) == '-m':
             ex.fsSizeCheck(10)
     else:
