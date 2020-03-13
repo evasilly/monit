@@ -16,6 +16,9 @@ str_format = 'yyyy-MM-dd hh:mm:ss'
 timePoint = QtCore.QDateTime.currentDateTime()
 beg = (timePoint.addSecs(-120)).toString(str_format)
 
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
 class CMonit(object):
     """
         Класс для проведения мониторинга
