@@ -74,8 +74,9 @@ def main():
         #     # print average CPU load during last 5 mins
         # elif str(sys.argv[1]) == '-hta -':
         #     # list top 10 website addresses and its ip-s
-        # elif str(sys.argv[1]) == '-mt':
-        #     # list mysql threads count during last 5 mins
+        elif str(sys.argv[1]) == '-mt':
+            os.system('echo -n "MySQL clients count: " && [[ $(mysqladmin -udbuser -pdbpassword'
+            ' status) =~ ^[^:]*\:[^:]+\:[[:blank:]]*([[:digit:]]+) ]] && echo "$((${BASH_REMATCH[1]}))" || echo "0"')
         elif str(sys.argv[1]) == '-m':
             ex.fsSizeCheck(10)
     else:
