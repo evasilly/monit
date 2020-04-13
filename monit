@@ -1,0 +1,78 @@
+#!/bin/sh
+        # Source function library.
+        if [ -f /etc/init.d/functions ] ; then
+          . /etc/init.d/functions
+        elif [ -f /etc/rc.d/init.d/functions ] ; then
+          . /etc/rc.d/init.d/functions
+        else
+          exit 0
+        fi
+        KIND="monit"
+        start() {
+                echo -n $"Starting $KIND service"
+                /home/megatron/workspace/monit/monit.py -all &
+                echo
+        }
+
+        getmyc() {
+                echo -n $"Checking MySQL clients count"
+                /home/megatron/workspace/monit/monit.py -mpt
+                echo
+        }
+
+         getfssize() {
+                echo -n $"Checking file system size"
+                /home/megatron/workspace/monit/monit.py -m
+                echo
+        }
+
+         getlisttop() {
+                echo -n $"Checking top users list in CPU usage"
+                /home/megatron/workspace/monit/monit.py -lut
+                echo
+        }
+	
+        stop() {
+                echo -n $"Shutting down $KIND service"
+                pkill -f monit >/dev/null
+                echo
+        }
+
+        restart() {
+                echo -n $"Restarting $KIND service"
+                pkill -f monit >/dev/null
+                /home/megatron/workspace/monit/monit.py -all &
+                echo
+        }
+
+        case "$1" in
+          start)
+                start
+                echo
+                ;;
+          getmyc)
+                getmyc
+                ;;
+          getfssize)
+                getfssize
+                ;;
+          getlisttop)
+                getlisttop
+                ;;
+          stop)
+                stop
+                echo
+                ;;
+          status)
+		ps aux | grep monit | grep -v 'grep' | grep -v 'status' >/dev/null && echo "Service is running" || echo "Service NOT running"
+		echo
+		;;
+          restart)
+                restart
+                echo
+                ;;
+          *)
+                echo $"Usage: $0 {start|stop|restart|status|getmyc|getfssize|getlisttop}"
+                exit 1
+        esac
+        exit $?
